@@ -21,11 +21,17 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Stan
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
 public class User implements Serializable{
     
     @Id

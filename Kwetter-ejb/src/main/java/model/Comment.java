@@ -5,18 +5,27 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Stan
  */
-public class Comment {
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+public class Comment implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +40,13 @@ public class Comment {
     @OneToOne
     private Posting post;
 
+    public Comment(Long Id, String content, User poster, Posting post) {
+        this.Id = Id;
+        this.content = content;
+        this.poster = poster;
+        this.post = post;
+    }
+
     public Comment(Long Id, String content, Date date, User poster, Posting post) {
         this.Id = Id;
         this.content = content;
@@ -38,15 +54,6 @@ public class Comment {
         this.poster = poster;
         this.post = post;
     }
-    /*To create a 'Comment' in the posting*/
-    public Comment(String content, Date date, User poster, Posting post) {
-        this.content = content;
-        this.date = date;
-        this.poster = poster;
-        this.post = post;
-    }
-    
-    
 
     public Long getId() {
         return Id;

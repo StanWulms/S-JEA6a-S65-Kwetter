@@ -7,6 +7,7 @@ package dao;
 
 import java.util.List;
 import model.Posting;
+import model.User;
 
 /**
  *
@@ -16,7 +17,7 @@ public interface PostingDao {
     
     Posting create(Posting p);
     
-    Posting update(Long id, String author, String title, String content);
+    Posting update(Long id, User author, String title, String content);
     
     void delete(Long id);
 
