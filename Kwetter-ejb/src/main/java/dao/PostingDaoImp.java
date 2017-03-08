@@ -36,30 +36,29 @@ public class PostingDaoImp implements PostingDao {
 
 
     @Override
-    public Posting create(Posting p) {
+    public void create(Posting p) {
         if (p == null) {
             throw new IllegalArgumentException("Posting is null");
         }
         p.setId(nextId.getAndIncrement());
         postings.put(p.getId(), p);
-        return p;
     }
 
     @Override
-    public Posting update(Long id, User author, String title, String content) {
-        if (author == null || title == null || content == null) {
+    public void update(Posting p) {
+        if (p.getAuthor() == null || p.getTitle() == null || p.getContent() == null) {
             throw new IllegalArgumentException("Author, Title or Content is null");
         }
-        if (!postings.containsKey(id)) {
-            throw new IllegalArgumentException("Id not found: " + id);
+        if (!postings.containsKey(p.getId())) {
+            throw new IllegalArgumentException("Id not found: " + p.getId());
         }
 
-        Posting p = postings.get(id);
-        p.setAuthor(author);
-        p.setTitle(title);
-        p.setContent(content);
+        Posting p2 = postings.get(p.getId());
+        p2.setAuthor(p.getAuthor());
+        p2.setTitle(p.getTitle());
+        p2.setContent(p.getContent());
 
-        return p;
+        //return p;
     }
 
     @Override
@@ -72,7 +71,8 @@ public class PostingDaoImp implements PostingDao {
     }
 
     @Override
-    public List<Posting> findAll() {
+    public List<Posting> findAll(User u) {
+        //List<Posting> x = (List<Posting>) postings.values();
         return new ArrayList(postings.values());
     }
 

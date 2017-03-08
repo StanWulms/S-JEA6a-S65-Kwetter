@@ -15,13 +15,13 @@ import model.User;
  */
 public interface PostingDao {
     
-    Posting create(Posting p);
+    void create(Posting p);
     
-    Posting update(Long id, User author, String title, String content);
+    void update(Posting p);
     
     void delete(Long id);
 
-    List<Posting> findAll();
+    List<Posting> findAll(User u);
 
     Posting find(Long id);
 }

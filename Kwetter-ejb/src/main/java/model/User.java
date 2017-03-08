@@ -21,6 +21,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,6 +33,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
+@Table(name= "User")
+@NamedQueries({
+    @NamedQuery(name = "User.setPassword", query = "upate User u set u.password = :password where u.id= :id"),
+    @NamedQuery(name = "User.getFollower", query = "select u from User as u where u.id= :id"),
+    @NamedQuery(name = "User.getFollowings", query = "select u from User as u where u.id= :id"),
+    @NamedQuery(name = "User.findAllFollowers", query = "select u from User as u where u.followers IN :followers"),
+    @NamedQuery(name = "User.findAllFollowings", query = "select u from User as u where u.followings IN :followings"),
+    @NamedQuery(name = "User.findByUsername", query = "select u from User as u where u.userName= :username")
+})
 public class User implements Serializable{
     
     @Id
@@ -41,6 +51,8 @@ public class User implements Serializable{
     private String userName;
     private String password;
     private String bio;
+    private String location;
+    private String website;
     
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private ArrayList<User> followers;
@@ -56,11 +68,13 @@ public class User implements Serializable{
         this.userName = userName;
     }
     
-    public User(String userName,String password, String bio, ArrayList<User> followers, ArrayList<User> followings, ArrayList<Posting> tweets)
+    public User(String userName,String password, String bio, String location, String website, ArrayList<User> followers, ArrayList<User> followings, ArrayList<Posting> tweets)
     {
         this.userName = userName;
         this.password = password;
         this.bio = bio;
+        this.location = location;
+        this.website = website;
         this.followers = followers;
         this.followings = followings;
         this.tweets = tweets;
@@ -96,6 +110,22 @@ public class User implements Serializable{
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
     public ArrayList<User> getFollowers() {

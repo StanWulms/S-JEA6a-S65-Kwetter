@@ -25,6 +25,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,6 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
+@Table(name= "Posting")
+@NamedQueries({
+    @NamedQuery(name = "Posting.findAll", query = "select p from Posting as p where p.author = :author")
+})
 public class Posting implements Serializable{
     
     @Id

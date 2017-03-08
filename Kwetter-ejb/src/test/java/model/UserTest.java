@@ -184,6 +184,7 @@ public class UserTest {
         assertEquals("ExpectedResult and Result are not equal", expResult, result);
     }
     
+    
     /**
      * Test method for testing the getFollowings method of the User class
      */
