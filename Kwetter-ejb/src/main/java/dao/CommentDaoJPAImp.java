@@ -8,6 +8,7 @@ package dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import model.Comment;
 import model.Posting;
 import model.User;
 
@@ -15,31 +16,33 @@ import model.User;
  *
  * @author Stan
  */
-public class PostingDaoJPAImp implements PostingDao {
+public class CommentDaoJPAImp implements CommentDao{
 
     private final EntityManager em;
-    private static PostingDaoJPAImp instance = null;
     
-    public PostingDaoJPAImp(EntityManager em)
+    private static CommentDaoJPAImp instance = null;
+    
+    public CommentDaoJPAImp(EntityManager em)
     {
         this.em = em;
     }
     
-    public static synchronized PostingDaoJPAImp getPostingDao(EntityManager em)
+    public static synchronized CommentDaoJPAImp getCommentDao(EntityManager em)
     {
         if(instance == null) {
-            instance = new PostingDaoJPAImp(em);
+            instance = new CommentDaoJPAImp(em);
         }
         
         return instance;
     }
+    
     @Override
-    public void create(Posting p) {
+    public void create(Comment c) {
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
         try {
-            em.persist(p);
+            em.persist(c);
             em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,12 +51,12 @@ public class PostingDaoJPAImp implements PostingDao {
     }
 
     @Override
-    public void update(Posting p) {
+    public void update(Comment c) {
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
         try {
-            em.merge(p);
+            em.merge(c);
             em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,8 +70,8 @@ public class PostingDaoJPAImp implements PostingDao {
             em.getTransaction().begin();
         }
         try {
-            Posting p = em.find(Posting.class, id);
-            em.remove(p);
+            Comment c = em.find(Comment.class, id);
+            em.remove(c);
             em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,14 +80,14 @@ public class PostingDaoJPAImp implements PostingDao {
     }
 
     @Override
-    public List<Posting> findAll(User u) {
+    public List<Comment> findAll(Posting p) {
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
         try {
-            Query q = em.createNamedQuery("Posting.findAll", Posting.class);
-            q.setParameter("author", u);
-            return (List<Posting>) q.getResultList();
+            Query q = em.createNamedQuery("Comment.findAll", Comment.class);
+            q.setParameter("post", p);
+            return (List<Comment>) q.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             em.getTransaction().rollback();
@@ -93,13 +96,13 @@ public class PostingDaoJPAImp implements PostingDao {
     }
 
     @Override
-    public Posting find(Long id) {
+    public Comment find(Long id) {
         if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
         }
         try {
-            Posting p = em.find(Posting.class, id);
-            return p;
+            Comment c = em.find(Comment.class, id);
+            return c;
         } catch (Exception e) {
             e.printStackTrace();
             em.getTransaction().rollback();

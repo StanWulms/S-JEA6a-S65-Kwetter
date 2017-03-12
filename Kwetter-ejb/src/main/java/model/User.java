@@ -5,10 +5,12 @@
  */
 package model;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -33,14 +35,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name= "User")
+@Table(name= "Userr")
 @NamedQueries({
-    @NamedQuery(name = "User.setPassword", query = "upate User u set u.password = :password where u.id= :id"),
-    @NamedQuery(name = "User.getFollower", query = "select u from User as u where u.id= :id"),
-    @NamedQuery(name = "User.getFollowings", query = "select u from User as u where u.id= :id"),
-    @NamedQuery(name = "User.findAllFollowers", query = "select u from User as u where u.followers IN :followers"),
-    @NamedQuery(name = "User.findAllFollowings", query = "select u from User as u where u.followings IN :followings"),
-    @NamedQuery(name = "User.findByUsername", query = "select u from User as u where u.userName= :username")
+//    @NamedQuery(name = "User.setPassword", query = "update User u set u.password = :password where u.id= :id"),
+//    @NamedQuery(name = "User.getFollower", query = "select u from User as u where u.id= :id"),
+//    @NamedQuery(name = "User.getFollowings", query = "select u from User as u where u.id= :id"),
+//    //@NamedQuery(name = "User.findAllFollowers", query = "select u from User as u where u.followers IN :followers"),
+//  //@NamedQuery(name = "User.findAllFollowers", query = "select u from User as u where u.id= :id"),
+//    //@NamedQuery(name = "User.findAllFollowings", query = "select u from User as u where u.followings IN :followings"),
+//  //@NamedQuery(name = "User.findAllFollowings", query = "select u from User as u where u.id= :id"),
+//    @NamedQuery(name = "User.findByUsername", query = "select u from User as u where u.userName= :username")
 })
 public class User implements Serializable{
     
@@ -55,13 +59,16 @@ public class User implements Serializable{
     private String website;
     
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private ArrayList<User> followers;
+    private List<User> followers;
     
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private ArrayList<User> followings;
+    private List<User> followings;
     
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private ArrayList<Posting> tweets;
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Posting> tweets;
+
+    public User() {
+    }
     
     public User(String userName)
     {
@@ -75,9 +82,9 @@ public class User implements Serializable{
         this.bio = bio;
         this.location = location;
         this.website = website;
-        this.followers = followers;
-        this.followings = followings;
-        this.tweets = tweets;
+        //this.followers = followers;
+        //this.followings = followings;
+        //this.tweets = tweets;
     }
     
     public Long getId() {
@@ -128,28 +135,33 @@ public class User implements Serializable{
         this.website = website;
     }
 
-    public ArrayList<User> getFollowers() {
+    public List<User> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(ArrayList<User> followers) {
+    public void setFollowers(List<User> followers) {
         this.followers = followers;
     }
 
-    public ArrayList<User> getFollowings() {
+    public List<User> getFollowings() {
         return followings;
     }
 
-    public void setFollowings(ArrayList<User> followings) {
+    public void setFollowings(List<User> followings) {
         this.followings = followings;
     }
 
-    public ArrayList<Posting> getTweets() {
+    public List<Posting> getTweets() {
         return tweets;
     }
 
-    public void setTweets(ArrayList<Posting> tweets) {
+    public void setTweets(List<Posting> tweets) {
         this.tweets = tweets;
+    }
+    
+    public void addFollowers(User follower)
+    {
+        this.followers.add(follower);
     }
 
     @Override

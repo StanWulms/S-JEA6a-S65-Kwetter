@@ -6,9 +6,11 @@
 package service;
 
 import dao.UserDao;
-import dao.UserDaoImp;
+//import dao.UserDaoImp;
+import dao.UserDaoJPAImp;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
 import model.Posting;
 import model.User;
 
@@ -20,40 +22,45 @@ public class UserService {
     
     private final UserDao userDao;
     
-    public UserService()
+//    public UserService()
+//    {
+//        //userDao = UserDaoImp.getUserDao();
+//                this.userDao = UserDaoJPAImp.getUserDao(em);
+//
+//    }
+    
+    public UserService(EntityManager em)
     {
-        this.userDao = UserDaoImp.getUserDao();
+        this.userDao = UserDaoJPAImp.getUserDao(em);
     }
     
     public void addUser(User u)
     {
-        if(find(u.getId()) == null) {
-            if(u.getBio().length() > 160) {
+        //if(find(u.getId()) == null) {
+            if(u.getBio() != null && u.getBio().length() > 160) {
                 throw new IllegalArgumentException("Bio cannot be longer than 160 characters");
             } else {
                 userDao.create(u);    
             }
             
-        } else {
-            throw new IllegalArgumentException("Id not found: " + u.getId());
-        }
-        
+        //} else {
+        //    throw new IllegalArgumentException("Id not found: " + u.getId());
+        //}
     }
     
     public void removeUser(Long id)
     {
-        if(find(id) != null) {
+        //if(find(id) != null) {
             userDao.delete(id);    
-        } else {
-            throw new IllegalArgumentException("Id not found: " + id);
-        }
-        
+        //} else {
+         //   throw new IllegalArgumentException("Id not found: " + id);
+        //}
     }
     
     public void editUser(User u)
     {
-        if(find(u.getId()) == null) {
-            if(u.getBio().length() > 160) {
+        if(find(u.getId()) != null) {
+            if(u.getBio() != null && u.getBio().length() > 160) {
                 throw new IllegalArgumentException("Bio cannot be longer than 160 characters");
             } else {
                 userDao.update(u);    

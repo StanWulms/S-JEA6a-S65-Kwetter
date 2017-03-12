@@ -7,13 +7,18 @@ package model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,6 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name= "Comment")
+@NamedQueries({
+    @NamedQuery(name = "Comment.findAll", query = "select c from Comment as c where c.post = :post")
+})
 public class Comment implements Serializable {
     
     @Id
@@ -34,14 +42,25 @@ public class Comment implements Serializable {
     private Long Id;
     
     private String content;
-    private Date date;
     
-    @ManyToOne
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private GregorianCalendar date;
+    
+    @OneToOne(cascade={CascadeType.PERSIST, CascadeType.REMOVE})
     private User poster;
     
-    @OneToOne
+    @OneToOne(cascade={CascadeType.PERSIST, CascadeType.REMOVE})
     private Posting post;
 
+    public Comment() {
+    }
+
+    public Comment(String content, User poster, Posting post) {
+        this.content = content;
+        this.poster = poster;
+        this.post = post;
+    }
+    
     public Comment(Long Id, String content, User poster, Posting post) {
         this.Id = Id;
         this.content = content;
@@ -49,7 +68,7 @@ public class Comment implements Serializable {
         this.post = post;
     }
 
-    public Comment(Long Id, String content, Date date, User poster, Posting post) {
+    public Comment(Long Id, String content, GregorianCalendar date, User poster, Posting post) {
         this.Id = Id;
         this.content = content;
         this.date = date;
@@ -73,11 +92,11 @@ public class Comment implements Serializable {
         this.content = content;
     }
 
-    public Date getDate() {
+    public GregorianCalendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(GregorianCalendar date) {
         this.date = date;
     }
 

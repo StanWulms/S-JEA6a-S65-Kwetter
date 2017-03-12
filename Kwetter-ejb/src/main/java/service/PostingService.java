@@ -7,7 +7,9 @@ package service;
 
 import dao.PostingDao;
 import dao.PostingDaoImp;
+import dao.PostingDaoJPAImp;
 import java.util.List;
+import javax.persistence.EntityManager;
 import model.Posting;
 import model.User;
 
@@ -21,6 +23,12 @@ public class PostingService {
     public PostingService() {
         this.postingDao = PostingDaoImp.getPostingDao();
     }
+
+    public PostingService(EntityManager em) {
+        this.postingDao = PostingDaoJPAImp.getPostingDao(em);
+    }
+    
+    
     
     public void addPosting(Posting p) {
         if(p.getContent().length() > 140) {

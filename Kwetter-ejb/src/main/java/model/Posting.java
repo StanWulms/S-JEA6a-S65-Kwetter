@@ -7,6 +7,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -47,21 +49,27 @@ public class Posting implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     
-    @ManyToOne
+    @OneToOne(cascade={CascadeType.PERSIST, CascadeType.REMOVE})
     private User author;
     private String title;
     private String content;
-    private Date date;
     
-    @OneToMany
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private GregorianCalendar date;
+    
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Comment> comments;
     private Long nextCommentId;
+
+    public Posting() {
+    }
+
     
     public Posting(User author, String title, String content) {
         this.author = author;
         this.title = title;
         this.content = content;
-        this.date = new Date();
+        this.date = new GregorianCalendar();
         this.comments = new ArrayList<Comment>();
         this.nextCommentId = 1L;
     }
@@ -71,7 +79,7 @@ public class Posting implements Serializable{
         this.author = author;
         this.title = title;
         this.content = content;
-        this.date = new Date();
+        this.date = new GregorianCalendar();
         this.comments = new ArrayList<Comment>();
         this.nextCommentId = 1L;
     }
@@ -93,7 +101,7 @@ public class Posting implements Serializable{
         this.content = content;
     }
 
-    public Date getDate() {
+    public GregorianCalendar getDate() {
         return date;
     }
 

@@ -80,6 +80,9 @@ public class UserDaoJPAImp implements UserDao {
 
     @Override
     public User find(Long id) {
+        if (!em.getTransaction().isActive()) {
+            em.getTransaction().begin();
+        }
         try {
             User u = em.find(User.class, id);
             return u;
@@ -96,7 +99,7 @@ public class UserDaoJPAImp implements UserDao {
             em.getTransaction().begin();
         }
         try {
-            Query q = em.createNamedQuery("User.findAll", Posting.class);
+            Query q = em.createNamedQuery("User.findAll", User.class);
             return (List<User>) q.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +114,7 @@ public class UserDaoJPAImp implements UserDao {
             em.getTransaction().begin();
         }
         Query q =  em.createNamedQuery("User.findAllFollowers",User.class);
-        q.setParameter("followers", id);
+        q.setParameter("id", id);
         return (List<User>) q.getResultList();
     }
 
@@ -121,7 +124,7 @@ public class UserDaoJPAImp implements UserDao {
             em.getTransaction().begin();
         }
         Query q =  em.createNamedQuery("User.findAllFollowings",User.class);
-        q.setParameter("followings", id);
+        q.setParameter("id", id);
         return (List<User>) q.getResultList();
     }
 
@@ -154,5 +157,4 @@ public class UserDaoJPAImp implements UserDao {
         q.setParameter("id",id);
         q.setParameter("password", password);
     }
-    
 }
